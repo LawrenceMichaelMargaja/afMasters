@@ -6,6 +6,7 @@ import Header from "./components/dashboard/Header";
 import DataSheet from "./components/dashboard/DataSheet";
 import { setDataType } from "./store/reducers/organization.ts";
 import { RootState } from "./store/store.ts";
+import { useState } from "react";
 
 const theme = createTheme();
 
@@ -49,6 +50,12 @@ const App: React.FC = () => {
 		}),
 	}));
 
+	const [sidebarData, setSideBarData] = useState<string>("");
+
+	console.log("======app.tsx", sidebarData);
+
+	const newData = sidebarData;
+
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
@@ -60,10 +67,11 @@ const App: React.FC = () => {
 						console.log("the selector --- ", isSideBarOpen);
 					}}
 					onItemClick={handleSidebarClick}
+					setSideBarData={setSideBarData}
 				/>
 				<Main open={isSideBarOpen}>
 					<Header page={display} />
-					<DataSheet />
+					<DataSheet sidebarData={newData} />
 				</Main>
 			</AppContainer>
 		</ThemeProvider>
