@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Table,
 	TableBody,
@@ -20,9 +20,9 @@ import {
 	toggleCheckbox,
 	selectAll,
 	deleteItem,
-	editItem,
 } from "../../store/reducers/organization";
 import EditModal from "../modal/EditModal";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 const DataSheet: React.FC = ({ sidebarData }: any) => {
 	const dispatch = useDispatch();
@@ -44,14 +44,6 @@ const DataSheet: React.FC = ({ sidebarData }: any) => {
 	const handleSelectAllToggle = () => dispatch(selectAll());
 
 	const handleDelete = (index: number) => dispatch(deleteItem(index));
-
-	const handleEdit = (index: number) => {
-		const updatedItem =
-			dataType === "Organizations"
-				? { ...organizations[index], organization: "Updated Org" }
-				: { ...capturePages[index], name: "Updated Name" };
-		dispatch(editItem({ index, updatedItem }));
-	};
 
 	const allSelected =
 		checkedItems.length ===
@@ -83,28 +75,78 @@ const DataSheet: React.FC = ({ sidebarData }: any) => {
 		],
 	];
 
-	const renderEle = (data: string[]) => {
-		return data.map((e) => (
-			<TableCell align="center">
-				<Typography variant="h6">{e}</Typography>
-			</TableCell>
-		));
-	};
+	// const renderEle = (data: string[]) => {
+	// 	return data.map((e) => (
+	// 		<TableCell align="center">
+	// 			<Typography variant="h6" fontSize={16}>
+	// 				{e}
+	// 			</Typography>
+	// 		</TableCell>
+	// 	));
+	// };
 
-	const renderData = (data: string[]) => {
-		return Object.keys(data).map((key: any) =>
-			key === "is_control" || key === "is_active" || key === "isActive" ? (
-				<TableCell align="center">{JSON.stringify(data[key])}</TableCell>
-			) : (
-				<TableCell align="center">{data[key]}</TableCell>
-			)
-		);
-	};
+	// const renderData = (data: string[]) => {
+	// 	return Object.keys(data).map((key: any) =>
+	// 		key === "is_control" || key === "is_active" || key === "isActive" ? (
+	// 			<TableCell align="center">{JSON.stringify(data[key])}</TableCell>
+	// 		) : (
+	// 			<TableCell align="center">{data[key]}</TableCell>
+	// 		)
+	// 	);
+	// };
 
 	const [open, setOpen] = useState<boolean>(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 	const [selectedItem, setSelectedItem] = useState<number | null>(null);
+
+	const [change, setChange] = useState<number>(0);
+
+	useEffect(() => {
+		if (sidebarData === "Capture Pages") {
+			setChange(1);
+		} else {
+			setChange(0);
+		}
+	}, [sidebarData]); 
+
+	const columns: GridColDef[] = titleData[change].map((e) => ({
+		field: e.toLowerCase().replace(/\s+/g, ""), // Field names in lowercase without spaces
+		headerName: e, 
+	}));
+
+
+	const rows = data.map((item, index) => {
+		if (change === 0) {
+			return {
+				id: index + 1,
+				user: item.user,
+				createdat: item.createdAt,
+				createdby: item.createdBy,
+				isactive: JSON.stringify(item.isActive),
+				lastupdatedAt: item.lastUpdatedAt,
+				organization: item.organization,
+			};
+		} else {
+			return {
+				id: index + 1,
+				name: item.name,
+				html: item.html,
+				clicks: item.clicks,
+				capturepagesetid: item.capture_page_set_id,
+				iscontrol: item.is_control,
+				impressions: item.impressions,
+				lastimpressionat: item.last_impression_at,
+				createdby: item.created_by,
+				createdat: item.created_at,
+				lastupdatedat: item.last_updated_at,
+				isactive: item.is_active,
+			};
+		}
+	});
+
+	const paginationModel = { page: 0, pageSize: 5 };
+
 	return (
 		<React.Fragment>
 			{selectedItem != null ? (
@@ -116,7 +158,8 @@ const DataSheet: React.FC = ({ sidebarData }: any) => {
 					selectedItem={selectedItem}
 				/>
 			) : null}
-			<TableContainer style={{ marginTop: "1em" }} component={Paper}>
+
+			{/* <TableContainer style={{ marginTop: "1em" }} component={Paper}>
 				<Table>
 					<TableHead>
 						<TableRow>
@@ -163,7 +206,7 @@ const DataSheet: React.FC = ({ sidebarData }: any) => {
 										setSelectedItem(index);
 									}}
 								>
-									<IconButton onClick={() => (handleEdit(index), handleOpen())}>
+									<IconButton onClick={() => handleOpen()}>
 										<EditIcon />
 									</IconButton>
 								</TableCell>
@@ -176,7 +219,17 @@ const DataSheet: React.FC = ({ sidebarData }: any) => {
 						))}
 					</TableBody>
 				</Table>
-			</TableContainer>
+			</TableContainer> */}
+			<Paper sx={{ height: 400, width: "100%" }}>
+				<DataGrid
+					rows={rows}
+					columns={columns}
+					initialState={{ pagination: { paginationModel } }}
+					pageSizeOptions={[5, 10]}
+					checkboxSelection
+					sx={{ border: 0 }}
+				/>
+			</Paper>
 		</React.Fragment>
 	);
 };

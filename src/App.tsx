@@ -1,21 +1,22 @@
+import { useEffect, useState } from "react";
 import { CssBaseline, ThemeProvider, createTheme, styled } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { setDisplayType, toggleSidebar } from "./store/reducers/dashboard";
 import Sidebar from "./components/dashboard/Sidebar";
 import Header from "./components/dashboard/Header";
 import DataSheet from "./components/dashboard/DataSheet";
-import { setDataType } from "./store/reducers/organization.ts";
-import { RootState } from "./store/store.ts";
-import { useState } from "react";
+import { setDataType } from "./store/reducers/organization";
+import { RootState } from "./store/store";
+import TableTwo from "./components/dashboard/TableTwo";
 
 const theme = createTheme();
+// const WIDTH_THRESHOLD = 998; // Set your desired width threshold
 
 const App: React.FC = () => {
 	const display = useSelector((state: RootState) => state.dashboard.display);
 	const isSideBarOpen = useSelector(
 		(state: RootState) => state.dashboard.isSideBarOpen
 	);
-
 	const dispatch = useDispatch();
 
 	const handleSidebarClick = (page: string) => {
@@ -41,7 +42,6 @@ const App: React.FC = () => {
 
 	const AppContainer = styled("div")<{ open: boolean }>(({ theme }) => ({
 		display: "flex",
-		// width: '100%',
 		height: "100vh",
 		backgroundColor: "#efefef",
 		transition: theme.transitions.create("margin", {
@@ -50,9 +50,20 @@ const App: React.FC = () => {
 		}),
 	}));
 
-	const [sidebarData, setSideBarData] = useState<string>("");
+	const [sidebarData, setSideBarData] = useState<string>(display);
 
-	console.log("======app.tsx", sidebarData);
+	useEffect(() => {
+		const handleResize = () => {
+			if (window.innerWidth < 998 && isSideBarOpen) {
+				dispatch(toggleSidebar());
+			}
+		};
+
+		window.addEventListener("resize", handleResize);
+		return () => {
+			window.removeEventListener("resize", handleResize);
+		};
+	}, [isSideBarOpen, dispatch]);
 
 	const newData = sidebarData;
 
@@ -62,14 +73,11 @@ const App: React.FC = () => {
 			<AppContainer open={isSideBarOpen}>
 				<Sidebar
 					open={isSideBarOpen}
-					onToggle={() => {
-						handleSidebarToggle();
-						console.log("the selector --- ", isSideBarOpen);
-					}}
+					onToggle={handleSidebarToggle}
 					onItemClick={handleSidebarClick}
 					setSideBarData={setSideBarData}
 				/>
-				<Main open={isSideBarOpen}>
+				<Main open={isSideBarOpen} style={{ overflowX: "hidden" }}>
 					<Header page={display} />
 					<DataSheet sidebarData={newData} />
 				</Main>

@@ -1,6 +1,9 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { TextField, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { editItem } from "../../store/reducers/organization";
 
 const style = {
 	position: "absolute",
@@ -29,10 +32,32 @@ export default function EditModal({
 	selectedItem,
 	sidebarData,
 }: EditModalProps) {
+	const dispatch = useDispatch();
+	const [formData, setFormData] = useState<any>({});
+
+	useEffect(() => {
+		if (selectedItem !== null && data[selectedItem]) {
+			setFormData(data[selectedItem]);
+		}
+	}, [selectedItem, data]);
+
 	if (selectedItem === null || !data[selectedItem]) return null;
 
-	const selectedData = data[selectedItem];
-	console.log(selectedData);
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setFormData((prev: any) => ({
+			...prev,
+			[name]: value,
+		}));
+	};
+
+	const handleSave = () => {
+		if (selectedItem !== null) {
+			dispatch(editItem({ index: selectedItem, updatedItem: formData }));
+			handleClose();
+		}
+	};
+
 	return (
 		<div>
 			<Modal
@@ -45,17 +70,26 @@ export default function EditModal({
 					<Typography variant="h6" gutterBottom>
 						Edit {sidebarData}
 					</Typography>
-					{Object.keys(selectedData).map((key) => (
+					{Object.keys(formData).map((key) => (
 						<TextField
 							key={key}
 							fullWidth
 							margin="normal"
 							label={key.charAt(0).toUpperCase() + key.slice(1)}
 							name={key}
-							value={selectedData[key]}
+							value={formData[key]}
+							onChange={handleChange}
 							required
 						/>
 					))}
+					<Button
+						onClick={handleSave}
+						variant="contained"
+						color="primary"
+						fullWidth
+					>
+						Save Changes
+					</Button>
 				</Box>
 			</Modal>
 		</div>
