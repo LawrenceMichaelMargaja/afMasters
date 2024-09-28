@@ -8,15 +8,15 @@ import DataSheet from "./components/dashboard/DataSheet";
 import { setDataType } from "./store/reducers/organization";
 import { RootState } from "./store/store";
 import TableTwo from "./components/dashboard/TableTwo";
+import EditModal from "./components/modal/EditModal";
+import AddModal from "./components/modal/AddModal";
 
 const theme = createTheme();
 // const WIDTH_THRESHOLD = 998; // Set your desired width threshold
 
 const App: React.FC = () => {
 	const display = useSelector((state: RootState) => state.dashboard.display);
-	const isSideBarOpen = useSelector(
-		(state: RootState) => state.dashboard.isSideBarOpen
-	);
+	const isSideBarOpen = useSelector((state: RootState) => state.dashboard.isSideBarOpen);
 	const dispatch = useDispatch();
 
 	const handleSidebarClick = (page: string) => {
@@ -80,6 +80,7 @@ const App: React.FC = () => {
 				<Main open={isSideBarOpen} style={{ overflowX: "hidden" }}>
 					<Header page={display} />
 					<DataSheet sidebarData={newData} />
+					<AddModal />
 				</Main>
 			</AppContainer>
 		</ThemeProvider>

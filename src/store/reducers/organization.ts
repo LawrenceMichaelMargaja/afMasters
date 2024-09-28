@@ -27,7 +27,7 @@ interface CapturePage {
 
 // Define the state structure
 interface AppState {
-	dataType: "organization" | "capturePage"; // Current data type being managed
+	dataType: "organization" | "capturePage" | string; // Current data type being managed
 	organizations: Organization[];
 	capturePages: CapturePage[];
 	checkedItems: number[];
@@ -61,7 +61,7 @@ const initialState: AppState = {
 						createdBy: "younes.outerbah",
 						createdAt: "2024-03-10",
 						lastUpdatedAt: "2024-01-15",
-					},
+					}
 			  ]
 			: JSON.parse(localStorage.getItem("dataOrgs") as string),
 	capturePages:

@@ -25,13 +25,7 @@ interface EditModalProps {
 	handleClose: () => void;
 }
 
-export default function EditModal({
-	open,
-	handleClose,
-	data,
-	selectedItem,
-	sidebarData,
-}: EditModalProps) {
+export default function EditModal({ open, handleClose, data, selectedItem, sidebarData }: EditModalProps) {
 	const dispatch = useDispatch();
 	const [formData, setFormData] = useState<any>({});
 
@@ -57,7 +51,6 @@ export default function EditModal({
 			handleClose();
 		}
 	};
-
 	return (
 		<div>
 			<Modal
@@ -82,12 +75,7 @@ export default function EditModal({
 							required
 						/>
 					))}
-					<Button
-						onClick={handleSave}
-						variant="contained"
-						color="primary"
-						fullWidth
-					>
+					<Button onClick={handleSave} variant="contained" color="primary" fullWidth>
 						Save Changes
 					</Button>
 				</Box>

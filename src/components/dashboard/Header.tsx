@@ -24,7 +24,7 @@ const Header: React.FC<{ page: string }> = ({ page }) => {
 			style={{
 				width: "100%",
 				height: "5%",
-				margin: "0 auto",
+				margin: "0 auto 15px",
 				backgroundColor: "#fff",
 				alignItems: "center",
 			}}
@@ -33,7 +33,7 @@ const Header: React.FC<{ page: string }> = ({ page }) => {
 				style={{
 					backgroundColor: "#fff",
 					border: "1px grey solid",
-					padding: "0 1em",
+					padding: "10px 1em",
 					width: "100%",
 					height: "100%",
 					margin: "0 auto",
