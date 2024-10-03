@@ -80,7 +80,6 @@ const App: React.FC = () => {
 				<Main open={isSideBarOpen} style={{ overflowX: "hidden" }}>
 					<Header page={display} />
 					<DataSheet sidebarData={newData} />
-					<AddModal />
 				</Main>
 			</AppContainer>
 		</ThemeProvider>

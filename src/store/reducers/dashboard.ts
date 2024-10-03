@@ -6,7 +6,7 @@ export interface DashboardState {
 }
 
 const initialState: DashboardState = {
-	display: "Capture Pages",
+	display: "Organizations",
 	isSideBarOpen: true,
 };
 

@@ -34,7 +34,7 @@ interface AppState {
 }
 
 const initialState: AppState = {
-	dataType: "organization",
+	dataType: "Organizations",
 	organizations:
 		localStorage.getItem("dataOrgs") === null
 			? [
@@ -61,7 +61,7 @@ const initialState: AppState = {
 						createdBy: "younes.outerbah",
 						createdAt: "2024-03-10",
 						lastUpdatedAt: "2024-01-15",
-					}
+					},
 			  ]
 			: JSON.parse(localStorage.getItem("dataOrgs") as string),
 	capturePages:
@@ -120,18 +120,13 @@ const appSlice = createSlice({
 		},
 		toggleCheckbox: (state, action: PayloadAction<number>) => {
 			if (state.checkedItems.includes(action.payload)) {
-				state.checkedItems = state.checkedItems.filter(
-					(item) => item !== action.payload
-				);
+				state.checkedItems = state.checkedItems.filter((item) => item !== action.payload);
 			} else {
 				state.checkedItems.push(action.payload);
 			}
 		},
 		selectAll: (state) => {
-			const dataLength =
-				state.dataType === "Organizations"
-					? state.organizations.length
-					: state.capturePages.length;
+			const dataLength = state.dataType === "Organizations" ? state.organizations.length : state.capturePages.length;
 			if (state.checkedItems.length === dataLength) {
 				state.checkedItems = [];
 			} else {
@@ -140,17 +135,11 @@ const appSlice = createSlice({
 		},
 		deleteItem: (state, action: PayloadAction<number>) => {
 			if (state.dataType === "Organizations") {
-				state.organizations = state.organizations.filter(
-					(_, index) => index !== action.payload
-				);
+				state.organizations = state.organizations.filter((_, index) => index !== action.payload);
 			} else {
-				state.capturePages = state.capturePages.filter(
-					(_, index) => index !== action.payload
-				);
+				state.capturePages = state.capturePages.filter((_, index) => index !== action.payload);
 			}
-			state.checkedItems = state.checkedItems.filter(
-				(item) => item !== action.payload
-			);
+			state.checkedItems = state.checkedItems.filter((item) => item !== action.payload);
 		},
 		editItem: (
 			state,
@@ -171,6 +160,5 @@ const appSlice = createSlice({
 	},
 });
 
-export const { setDataType, toggleCheckbox, selectAll, deleteItem, editItem } =
-	appSlice.actions;
+export const { setDataType, toggleCheckbox, selectAll, deleteItem, editItem } = appSlice.actions;
 export default appSlice.reducer;

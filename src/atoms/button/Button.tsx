@@ -3,14 +3,7 @@ import { Button } from "@mui/material";
 
 // Define the allowed types for the variant and color props
 type ButtonVariant = "text" | "outlined" | "contained";
-type ButtonColor =
-	| "inherit"
-	| "primary"
-	| "secondary"
-	| "success"
-	| "error"
-	| "info"
-	| "warning";
+type ButtonColor = "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning";
 
 interface ButtonComponentProps {
 	name?: string;

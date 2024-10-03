@@ -11,7 +11,7 @@ const style = {
 	top: "50%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
-	width: 400,
+	width: 1200,
 	bgcolor: "background.paper",
 	border: "2px solid #000",
 	boxShadow: 24,
@@ -24,14 +24,13 @@ export default function AddModal() {
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
-	function hh() {
-		return Object.values(data.capturePages[0]).map((e) => console.log(e));
-	}
+	const cpModalData = ["Capture page name:", "Add your capture page code below:"];
 
-	hh();
 	return (
 		<div>
-			<Button onClick={handleOpen}>Open modal</Button>
+			<Button onClick={handleOpen} variant="contained">
+				ADD CAPTURE PAGE
+			</Button>
 			<Modal
 				open={open}
 				onClose={handleClose}
@@ -39,20 +38,35 @@ export default function AddModal() {
 				aria-describedby="modal-modal-description"
 			>
 				<Box sx={style}>
-					{Object.keys(data.capturePages[0]).map((key: any) => (
+					<Typography variant="h3" component="h2" style={{ marginBottom: "30px" }}>
+						Add a Capture Page
+					</Typography>
+
+					{cpModalData.map((val) => (
 						<>
 							<Typography id="modal-modal-title" variant="h6" component="h2">
-								Add a new {key}
+								{val}
 							</Typography>
-							<TextField fullWidth margin="normal" label="user" name="user" required />
+							{val === "Add your capture page code below:" ? (
+								<textarea
+									style={{ width: "100%", height: "400px", padding: "10px", marginTop: "10px" }}
+									aria-label={val}
+									placeholder="your html code goes here"
+								/>
+							) : (
+								<TextField fullWidth margin="normal" label={val} name={val} required />
+							)}
 						</>
 					))}
-					<Typography id="modal-modal-description" sx={{ mt: 2 }}>
-						Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-					</Typography>
-					<Button variant="contained" color="primary" fullWidth style={{ marginTop: "10px" }}>
-						Save Changes
-					</Button>
+
+					<div style={{ display: "flex", gap: 12 }}>
+						<Button variant="contained" color="primary" fullWidth style={{ marginTop: "10px" }}>
+							Save Changes
+						</Button>
+						<Button onClick={handleClose} variant="contained" color="error" fullWidth style={{ marginTop: "10px" }}>
+							Cancel
+						</Button>
+					</div>
 				</Box>
 			</Modal>
 		</div>

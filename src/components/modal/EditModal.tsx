@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, Grid2, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { editItem } from "../../store/reducers/organization";
@@ -52,34 +52,36 @@ export default function EditModal({ open, handleClose, data, selectedItem, sideb
 		}
 	};
 	return (
-		<div>
-			<Modal
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description"
-			>
-				<Box sx={style}>
+		<Modal
+			open={open}
+			onClose={handleClose}
+			aria-labelledby="modal-modal-title"
+			aria-describedby="modal-modal-description"
+		>
+			<Box sx={style}>
+				<Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 					<Typography variant="h6" gutterBottom>
 						Edit {sidebarData}
 					</Typography>
 					{Object.keys(formData).map((key) => (
-						<TextField
-							key={key}
-							fullWidth
-							margin="normal"
-							label={key.charAt(0).toUpperCase() + key.slice(1)}
-							name={key}
-							value={formData[key]}
-							onChange={handleChange}
-							required
-						/>
+						<Grid2 size={6}>
+							<TextField
+								key={key}
+								fullWidth
+								margin="normal"
+								label={key.charAt(0).toUpperCase() + key.slice(1)}
+								name={key}
+								value={formData[key]}
+								onChange={handleChange}
+								required
+							/>
+						</Grid2>
 					))}
 					<Button onClick={handleSave} variant="contained" color="primary" fullWidth>
 						Save Changes
 					</Button>
-				</Box>
-			</Modal>
-		</div>
+				</Grid2>
+			</Box>
+		</Modal>
 	);
 }
